@@ -9,28 +9,28 @@ app.get("/api", (req, res) => {
     res.status(200).send([{
           id: '1',
           name: 'Riya',
-          lastname: 'lalwani',
+          lastName: 'lalwani',
           email: 'riya123@gmail.com',
           role: 'developer'
         },
         {
           id: '2',
           name: 'kunal',
-          lastname: 'thakur',
+          lastName: 'thakur',
           email: 'kunalthakur@gmail.com',
           role: 'developer'
         },
         {
           id: '3',
           name: 'Srushti',
-          lastname: 'wani',
+          lastName: 'wani',
           email: 'srushti123@gmail.com',
           role: 'developer'
         },
         {
           id: '4',
           name: 'tanu',
-          lastname: 'datt',
+          lastName: 'datt',
           email: 'tanudatt@gmail.com',
           role: 'developer'
         }]

@@ -68,13 +68,17 @@ const RepoPage = () => {
      console.log(response)
     })
   },[])
-  return (
-    <div className="cds--grid cds--grid--full-width cds--grid--no-gutter repo-page">
-      <div className="cds--row repo-page__r1">
-        <div className="cds--col-lg-16">Data table will go here</div>
-        <RepoTable headers={headers} rows={tabledata} />
-      </div>
-    </div>
+  // return (
+  //   // <div className="cds--grid cds--grid--full-width cds--grid--no-gutter repo-page">
+  //   // <div className="cds--row repo-page__r1">
+  //   //     <div className="cds--col-lg-16">Data table will go here</div>
+  //       <RepoTable headers={headers} rows={tabledata} />
+  //     // </div>
+  //   // </div>
+  // );
+
+  return(
+    <RepoTable headers={headers} rows={tabledata}/>
   );
 };
 
