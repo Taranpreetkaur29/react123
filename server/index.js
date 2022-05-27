@@ -15,9 +15,9 @@ app.get("/api", (req, res) => {
         },
         {
           id: '2',
-          name: 'kunal',
-          lastName: 'thakur',
-          email: 'kunalthakur@gmail.com',
+          name: 'Sahej',
+          lastName: 'uppal',
+          email: 'sahej@gmail.com',
           role: 'developer'
         },
         {
@@ -29,11 +29,33 @@ app.get("/api", (req, res) => {
         },
         {
           id: '4',
-          name: 'tanu',
+          name: 'Tanu',
           lastName: 'datt',
           email: 'tanudatt@gmail.com',
           role: 'developer'
-        }]
+        },
+        {
+          id: '5',
+          name: 'Arushi',
+          lastName: 'joshi',
+          email: 'arushi@gmail.com',
+          role: 'developer'
+        },
+        {
+          id: '6',
+          name: 'Babanpreet',
+          lastName: 'kaur',
+          email: 'babanpreet@gmail.com',
+          role: 'developer'
+        },
+        {
+          id: '7',
+          name: 'Jagmeet singh',
+          lastName: 'Khokhar',
+          email: 'jaggu@gmail.com',
+          role: 'developer'
+        },
+      ]
 
     );
 });

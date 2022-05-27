@@ -10,7 +10,6 @@ class App extends Component {
         {/* Hello Carbon! Well, not quite yet. This is the starting point for the
         Carbon tutorial
         <Button>Button</Button> */}
-        <p>hello</p>
         <RepoPage/>
       </div>
     );
