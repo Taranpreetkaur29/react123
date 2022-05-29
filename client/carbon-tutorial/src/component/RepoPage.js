@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import RepoTable from './RepoTable';
 import axios from 'axios';
+import { Pagination } from 'carbon-components-react';
+// import {
+//   Link,
+//   DataTableSkeleton,
+//   Pagination,
+//   Grid,
+//   Column,
+// } from '@carbon/react';
 
 const headers = [
   {
@@ -61,25 +69,57 @@ const headers = [
 
 
 const RepoPage = () => {
-  const[tabledata, settabledata]=useState([])
-  useEffect(()=>{
-    axios.get('http://localhost:3001/api').then(response =>{
-      settabledata(response.data)
-     console.log(response)
-    })
-  },[])
-  // return (
-  //   // <div className="cds--grid cds--grid--full-width cds--grid--no-gutter repo-page">
-  //   // <div className="cds--row repo-page__r1">
-  //   //     <div className="cds--col-lg-16">Data table will go here</div>
-  //       <RepoTable headers={headers} rows={tabledata} />
-  //     // </div>
-  //   // </div>
-  // );
+  const [tabledata, settabledata] = useState([])
+  const [firstRowIndex, setFirstRowIndex] = useState(0);
+  const [currentPageSize, setCurrentPageSize] = useState(10);
+  // useEffect(() => {
+  //   axios.get('http://localhost:3001/api').then(response => {
+  //     settabledata(response.data)
+  //     console.log(response)
+  //   })
 
-  return(
-    <RepoTable headers={headers} rows={tabledata}/>
+  // }, [])
+  useEffect(() => {
+    async function getData() {
+        const res = await axios.get(`/employee`);
+        settabledata(res.data);
+    }
+    getData();
+
+}, [])
+let empdata = [];
+
+tabledata.map((item, index) => {
+
+    let emp = {};
+
+    emp["id"] = index;
+    emp["name"] = item.name;
+    emp["lastName"] = item.lastName;
+    emp["email"] = item.email;
+    emp["role"] = item.role;
+    empdata.push(emp);
+})
+  return (<>
+    <RepoTable headers={headers} rows={empdata.slice(firstRowIndex, firstRowIndex + currentPageSize)
+    }/>
+    <Pagination
+      totalItems={tabledata.length}
+      backwardText="Previous page"
+      forwardText="Next page"
+      pageSize={currentPageSize}
+      pageSizes={[5, 10, 15, 25]}
+      itemsPerPageText="Items per page"
+      onChange={({ page, pageSize }) => {
+      if (pageSize !== currentPageSize) {
+        setCurrentPageSize(pageSize);
+      }
+      setFirstRowIndex(pageSize * (page - 1));
+  }}
+/>
+</>
   );
+
 };
 
 export default RepoPage;
