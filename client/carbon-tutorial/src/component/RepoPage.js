@@ -2,13 +2,6 @@ import React, { useEffect, useState } from 'react';
 import RepoTable from './RepoTable';
 import axios from 'axios';
 import { Pagination } from 'carbon-components-react';
-// import {
-//   Link,
-//   DataTableSkeleton,
-//   Pagination,
-//   Grid,
-//   Column,
-// } from '@carbon/react';
 
 const headers = [
   {
@@ -104,7 +97,7 @@ tabledata.map((item, index) => {
     <RepoTable headers={headers} rows={empdata.slice(firstRowIndex, firstRowIndex + currentPageSize)
     }/>
     <Pagination
-      totalItems={tabledata.length}
+      totalItems={empdata.length}
       backwardText="Previous page"
       forwardText="Next page"
       pageSize={currentPageSize}
