@@ -7,14 +7,19 @@ import {
   TableHeader,
   TableBody,
   TableCell,
+  TableToolbar,
+  TableToolbarSearch,
 } from 'carbon-components-react';
 
 const RepoTable = ({ rows, headers }) => {
     return (
       <DataTable rows={rows} headers={headers}>
-  {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
+  {({ rows, headers, getTableProps, getHeaderProps, getRowProps, onInputChange}) => (
     <Table {...getTableProps()}>
       <TableHead>
+        <TableToolbar>
+          <TableToolbarSearch on onChange={onInputChange}/>
+        </TableToolbar>
         <TableRow>
           {headers.map((header) => (
             <TableHeader {...getHeaderProps({ header, isSortable: true })}>
