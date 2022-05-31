@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import RepoTable from './RepoTable';
 import axios from 'axios';
-import { Pagination } from 'carbon-components-react';
+//import { Pagination } from 'carbon-components-react';
+import { route } from 'express/lib/application';
+
 
 const headers = [
   {
@@ -93,26 +95,53 @@ tabledata.map((item, index) => {
     emp["role"] = item.role;
     empdata.push(emp);
 })
-  return (<>
-    <RepoTable headers={headers} rows={empdata.slice(firstRowIndex, firstRowIndex + currentPageSize)
-    }/>
-    <Pagination
-      totalItems={empdata.length}
-      backwardText="Previous page"
-      forwardText="Next page"
-      pageSize={currentPageSize}
-      pageSizes={[5, 10, 15, 25]}
-      itemsPerPageText="Items per page"
-      onChange={({ page, pageSize }) => {
-      if (pageSize !== currentPageSize) {
-        setCurrentPageSize(pageSize);
-      }
-      setFirstRowIndex(pageSize * (page - 1));
-  }}
-/>
-</>
-  );
+//   return (<>
+//     <RepoTable headers={headers} rows={empdata.slice(firstRowIndex, firstRowIndex + currentPageSize)
+//     }/>
+//     <Pagination
+//       totalItems={empdata.length}
+//       backwardText="Previous page"
+//       forwardText="Next page"
+//       pageSize={currentPageSize}
+//       pageSizes={[5, 10, 15, 25]}
+//       itemsPerPageText="Items per page"
+//       onChange={({ page, pageSize }) => {
+//       if (pageSize !== currentPageSize) {
+//         setCurrentPageSize(pageSize);
+//       }
+//       setFirstRowIndex(pageSize * (page - 1));
+//   }}
+// />
+// </>
 
+  // );
+  return(
+    <RepoTable headers={headers} rows={empdata.slice(firstRowIndex, firstRowIndex + currentPageSize)}
+    <
+    route.get('empdata', async (req, res, next)=>{
+      try {
+        let {page,size} =req.query;
+        if(!page){
+          page=1;
+        }
+        if(!size){
+          size=10;
+        }
+        const limit =parseInt(size);
+        const skip =(page-1)*size;
+        const empdata = await empdata.find().limit(limit).skip(skip)
+        //res.send(users);
+        res.send({
+          page,
+          size,
+          data:empdata,
+        })
+      }
+      catch(error){
+        res.sendstatus(500).send(error.message);
+      }
+    })
+  )
 };
 
 export default RepoPage;

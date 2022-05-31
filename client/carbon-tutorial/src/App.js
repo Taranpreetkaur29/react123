@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import './app.scss';
 import RepoPage from './component/RepoPage';
 
-
-
 class App extends Component {
   render() {
     return (
