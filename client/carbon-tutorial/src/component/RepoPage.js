@@ -2,10 +2,6 @@ import React, { useEffect, useState } from 'react';
 import RepoTable from './RepoTable';
 import axios from 'axios';
 import { Pagination } from 'carbon-components-react';
-import { append } from 'express/lib/response';
-import { query } from 'express';
-import users from '../../../../server/mongo/users';
-
 
 const headers = [
   {
@@ -69,6 +65,9 @@ const RepoPage = () => {
   const [tabledata, settabledata] = useState([])
   const [firstRowIndex, setFirstRowIndex] = useState(0);
   const [currentPageSize, setCurrentPageSize] = useState(10);
+  const [que,setQue]= useState("");
+  const [page,setPage]=useState(1);
+  const [size,setSize]=useState(5);
   // useEffect(() => {
   //   axios.get('http://localhost:3001/api').then(response => {
   //     settabledata(response.data)
@@ -85,13 +84,16 @@ const RepoPage = () => {
 //     getData();
 
 // }, [])
-
+function searchitem(item){
+  console.log(item);
+  setQue(item);
+}
 useEffect(()=>{
   const empnew= async()=>{
-    const res=await axios.get('./admin?=${que}&page=${page}&size=${size}');
-
-  };
-  if(que.length == 0 || que.length >2)empnew();
+    const res=await axios.get(`/employee?que=${que}&page=${page}&size=${size}`);
+    settabledata(res.data)
+  }
+  if(que.length === 0 || que.length >2)empnew();
   
 },[que,page,size])
 
@@ -107,15 +109,9 @@ tabledata.map((item, index) => {
     empdata.push(emp);
     return null;
 })
-    append.get("/search/:name",function(req,res){
-    var regex=new RegExp(req.params.name,'i');
-    User.find({name:regex}).then((result)=>{
-    res.status(200).json(result)
-    })
-  })
   return (<>
     <RepoTable headers={headers} rows={empdata.slice(firstRowIndex, firstRowIndex + currentPageSize)
-    }/>
+    } search={searchitem}/>
     <Pagination
       totalItems={empdata.length}
       backwardText="Previous page"

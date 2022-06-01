@@ -11,14 +11,15 @@ import {
   TableToolbarSearch
 } from 'carbon-components-react';
 
-const RepoTable = ({ rows, headers }) => {
+const RepoTable = ({ rows, headers, search}) => {
     return (
       <DataTable rows={rows} headers={headers}>
   {({ rows, headers,onInputChange, getTableProps, getHeaderProps, getRowProps }) => (
     <Table {...getTableProps()}>
       <TableHead>
       <TableToolbar>
-          <TableToolbarSearch on onChange={onInputChange} />
+          <TableToolbarSearch on onChange={(e)=> search(e.target.value.toLocaleLowerCase())
+          } />
         </TableToolbar>
         <TableRow>
           {headers.map((header) => (
