@@ -21,7 +21,6 @@ const headers = [
     header: 'Role',
   },
 ];
-
 // const rows = [
 //   {
 //     id: '1',
@@ -59,12 +58,13 @@ const headers = [
 //     role: 'developer',
 //   },
 // ];
-
-
 const RepoPage = () => {
   const [tabledata, settabledata] = useState([])
   const [firstRowIndex, setFirstRowIndex] = useState(0);
   const [currentPageSize, setCurrentPageSize] = useState(10);
+  const [que, setQue] = useState("");
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(3);
   // useEffect(() => {
   //   axios.get('http://localhost:3001/api').then(response => {
   //     settabledata(response.data)
@@ -72,17 +72,31 @@ const RepoPage = () => {
   //   })
 
   // }, [])
+  function searchitem(item) {
+    console.log(item);
+    setQue(item);
+  }
   useEffect(() => {
-    async function getData() {
-        const res = await axios.get(`/employee`);
-        settabledata(res.data);
+    if(que.length >3 ) {
+      fetch(`http://localhost:3001/employee?que=${que}&page=${page}&size=${size}`)
+      .then(data => data.json())
+      .then((json) => {
+            settabledata(json);
+      })
     }
-    getData();
+  }, [que, page, size])
 
-}, [])
-let empdata = [];
+  useEffect(() => {
+      fetch(`http://localhost:3001/employee?que=${que}&page=${page}&size=${size}`)
+      .then(data => data.json())
+      .then((json) => {
+            settabledata(json);
+      })
 
-tabledata.map((item, index) => {
+  }, [])
+
+  let empdata = [];
+  tabledata.map((item, index) => {
 
     let emp = {};
 
@@ -92,10 +106,13 @@ tabledata.map((item, index) => {
     emp["email"] = item.email;
     emp["role"] = item.role;
     empdata.push(emp);
-})
+    return null;
+  })
   return (<>
-    <RepoTable headers={headers} rows={empdata.slice(firstRowIndex, firstRowIndex + currentPageSize)
-    }/>
+    <RepoTable 
+    headers={headers} 
+    rows={empdata.slice(firstRowIndex, firstRowIndex + currentPageSize)} 
+    search={searchitem} />
     <Pagination
       totalItems={empdata.length}
       backwardText="Previous page"
@@ -104,13 +121,13 @@ tabledata.map((item, index) => {
       pageSizes={[5, 10, 15, 25]}
       itemsPerPageText="Items per page"
       onChange={({ page, pageSize }) => {
-      if (pageSize !== currentPageSize) {
-        setCurrentPageSize(pageSize);
-      }
-      setFirstRowIndex(pageSize * (page - 1));
-  }}
-/>
-</>
+        if (pageSize !== currentPageSize) {
+          setCurrentPageSize(pageSize);
+        }
+        setFirstRowIndex(pageSize * (page - 1));
+      }}
+    />
+  </>
   );
 
 };
