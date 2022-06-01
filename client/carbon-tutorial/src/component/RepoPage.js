@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import RepoTable from './RepoTable';
 import axios from 'axios';
-//import { Pagination } from 'carbon-components-react';
-import { route } from 'express/lib/application';
+import { Pagination } from 'carbon-components-react';
+import { append } from 'express/lib/response';
+import { query } from 'express';
+import users from '../../../../server/mongo/users';
 
 
 const headers = [
@@ -74,74 +76,61 @@ const RepoPage = () => {
   //   })
 
   // }, [])
-  useEffect(() => {
-    async function getData() {
-        const res = await axios.get(`/employee`);
-        settabledata(res.data);
-    }
-    getData();
 
-}, [])
-let empdata = [];
+//   useEffect(() => {
+//     async function getData() {
+//         const res = await axios.get(`/employee`);
+//         settabledata(res.data);
+//     }
+//     getData();
+
+// }, [])
+
+useEffect(()=>{
+  const empnew= async()=>{
+    const res=await axios.get('./admin?=${que}&page=${page}&size=${size}');
+
+  };
+  if(que.length == 0 || que.length >2)empnew();
+  
+},[que,page,size])
+
+let empdata = []; 
 
 tabledata.map((item, index) => {
-
     let emp = {};
-
     emp["id"] = index;
     emp["name"] = item.name;
     emp["lastName"] = item.lastName;
     emp["email"] = item.email;
     emp["role"] = item.role;
     empdata.push(emp);
+    return null;
 })
-//   return (<>
-//     <RepoTable headers={headers} rows={empdata.slice(firstRowIndex, firstRowIndex + currentPageSize)
-//     }/>
-//     <Pagination
-//       totalItems={empdata.length}
-//       backwardText="Previous page"
-//       forwardText="Next page"
-//       pageSize={currentPageSize}
-//       pageSizes={[5, 10, 15, 25]}
-//       itemsPerPageText="Items per page"
-//       onChange={({ page, pageSize }) => {
-//       if (pageSize !== currentPageSize) {
-//         setCurrentPageSize(pageSize);
-//       }
-//       setFirstRowIndex(pageSize * (page - 1));
-//   }}
-// />
-// </>
-
-  // );
-  return(
-    <RepoTable headers={headers} rows={empdata.slice(firstRowIndex, firstRowIndex + currentPageSize)}
-    <
-    route.get('empdata', async (req, res, next)=>{
-      try {
-        let {page,size} =req.query;
-        if(!page){
-          page=1;
-        }
-        if(!size){
-          size=10;
-        }
-        const limit =parseInt(size);
-        const skip =(page-1)*size;
-        const empdata = await empdata.find().limit(limit).skip(skip)
-        //res.send(users);
-        res.send({
-          page,
-          size,
-          data:empdata,
-        })
-      }
-      catch(error){
-        res.sendstatus(500).send(error.message);
-      }
+    append.get("/search/:name",function(req,res){
+    var regex=new RegExp(req.params.name,'i');
+    User.find({name:regex}).then((result)=>{
+    res.status(200).json(result)
     })
-  )
+  })
+  return (<>
+    <RepoTable headers={headers} rows={empdata.slice(firstRowIndex, firstRowIndex + currentPageSize)
+    }/>
+    <Pagination
+      totalItems={empdata.length}
+      backwardText="Previous page"
+      forwardText="Next page"
+      pageSize={currentPageSize}
+      pageSizes={[5, 10, 15, 25]}
+      itemsPerPageText="Items per page"
+      onChange={({ page, pageSize }) => {
+      if (pageSize !== currentPageSize) {
+        setCurrentPageSize(pageSize);
+      }
+      setFirstRowIndex(pageSize * (page - 1));
+  }} 
+/>
+</>
+  );
 };
-
 export default RepoPage;
